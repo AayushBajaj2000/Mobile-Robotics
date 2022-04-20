@@ -10,17 +10,26 @@
   <!-- AMCL -->
   <include file="$(find turtlebot3_navigation)/launch/amcl.launch"/>
 
+  <!-- LASER FILTER -->
+  <node pkg="laser_filters" type="scan_to_scan_filter_chain" output="screen" name="laser_filter">
+    <rosparam command="load" file="$(find laser_filters)/examples/sector_filter.yaml" />
+  </node>
+
   <!-- move_base -->
   <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
     <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
     <rosparam file="$(find turtlebot3_navigation)/param/costmap_common_params_$(arg model).yaml" command="load" ns="global_costmap" />
     <rosparam file="$(find turtlebot3_navigation)/param/costmap_common_params_$(arg model).yaml" command="load" ns="local_costmap" />
-    <rosparam file="$(find turtlebot3_navigation)/param/local_costmap_params.yaml" command="load" />
-    <rosparam file="$(find turtlebot3_navigation)/param/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find turtlebot3_navigation)/param/local_custom_params.yaml" command="load" />
+    <!--<rosparam file="$(find turtlebot3_navigation)/param/local_costmap_params.yaml" command="load" />-->
+    <rosparam file="$(find turtlebot3_navigation)/param/global_custom_params.yaml" command="load" />
+    <!--<rosparam file="$(find turtlebot3_navigation)/param/global_costmap_params.yaml" command="load" />-->
     <rosparam file="$(find turtlebot3_navigation)/param/move_base_params.yaml" command="load" />
-    <rosparam file="$(find turtlebot3_navigation)/param/dwa_local_planner_params_$(arg model).yaml" command="load" />
+    <!--<rosparam file="$(find turtlebot3_navigation)/param/dwa_local_planner_params_$(arg model).yaml" command="load" />-->
+    <rosparam file="$(find turtlebot3_navigation)/param/dwa_custom_planner_params.yaml" command="load" />
     <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
     <remap from="odom" to="$(arg odom_topic)"/>
+    <remap from="scan" to="scan_filtered" />
   </node>
   
   <!-- TurtleBot3 and Gmapping, Gazebo and explore_lite 
@@ -33,8 +42,14 @@
     <arg name="model" value="$(arg model)" />
   </include>
 
-  <!-- SLAM: Gmapping, Cartographer, Hector, Karto, Frontier_exploration, RTAB-Map -->
-  <include file="$(find turtlebot3_slam)/launch/turtlebot3_$(arg slam_methods).launch">
+  <!--NORMAL-SLAM: Gmapping, Cartographer, Hector, Karto, Frontier_exploration, RTAB-Map -->
+  <!--<include file="$(find turtlebot3_slam)/launch/turtlebot3_$(arg slam_methods).launch">
+    <arg name="model" value="$(arg model)"/>
+    <arg name="configuration_basename" value="$(arg configuration_basename)"/>
+  </include>-->
+
+  <!--NORMAL-SLAM: Gmapping, Cartographer, Hector, Karto, Frontier_exploration, RTAB-Map -->
+  <include file="$(find turtlebot3_slam)/launch/turtlebot3_slam_gmapping_custom.launch">
     <arg name="model" value="$(arg model)"/>
     <arg name="configuration_basename" value="$(arg configuration_basename)"/>
   </include>
@@ -47,13 +62,17 @@
 
   <include file="$(find explore_lite)/launch/explore.launch">
   </include> 
-   <node pkg="phase_one" name="odom_listener" type="odom_listener" output="screen">
+   <node pkg="phase_two" name="odom_listener" type="moveBack.py" output="screen">
    </node>
+    <node pkg="ar_track_alvar" type="individualMarkersNoKinect" name="ar_track_alvar" respawn="false" output="screen">
+	    <param name="marker_size"           type="double" value="4.15" />
+	    <param name="max_new_marker_error"  type="double" value="0.08" />
+	    <param name="max_track_error"       type="double" value="0.2" />
+	    <param name="output_frame"          type="string" value="/base_footprint" />
 
-  <include file="$(find aruco_detect)/launch/aruco_detect.launch">
-  </include>
-  <!--<node pkg="phase_two" name="marker_publisher" type="marker_publisher" output="screen">
-  </node>-->
-  <node pkg="phase_two" name="marker_publish" type="marker_publish.py" output="screen">
+	    <remap from="camera_image"  to="/raspicam_node/image" />
+	    <remap from="camera_info"   to="/raspicam_node/camera_info" />
+    </node>
+  <node pkg="phase_three" name="marker_publish" type="marker.py" output="screen">
   </node>
 </launch>

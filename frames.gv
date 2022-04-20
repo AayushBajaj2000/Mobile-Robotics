@@ -1,0 +1,19 @@
+digraph G {
+"base_footprint" -> "base_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1648016557.930 sec old)\nBuffer length: 0.000 sec\n"];
+"odom" -> "base_footprint"[label="Broadcaster: /turtlebot3_core\nAverage rate: 26.681 Hz\nMost recent transform: 1648016557.896 ( 0.034 sec old)\nBuffer length: 4.910 sec\n"];
+"base_link" -> "camera_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1648016557.930 sec old)\nBuffer length: 0.000 sec\n"];
+"camera_link" -> "camera_rgb_frame"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1648016557.930 sec old)\nBuffer length: 0.000 sec\n"];
+"camera_rgb_frame" -> "camera_rgb_optical_frame"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1648016557.930 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "caster_back_left_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1648016557.930 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "caster_back_right_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1648016557.930 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "imu_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1648016557.930 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "base_scan"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1648016557.930 sec old)\nBuffer length: 0.000 sec\n"];
+"base_link" -> "wheel_left_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 26.516 Hz\nMost recent transform: 1648016557.896 ( 0.034 sec old)\nBuffer length: 5.016 sec\n"];
+"base_link" -> "wheel_right_link"[label="Broadcaster: /robot_state_publisher\nAverage rate: 26.516 Hz\nMost recent transform: 1648016557.896 ( 0.034 sec old)\nBuffer length: 5.016 sec\n"];
+"map" -> "odom"[label="Broadcaster: /turtlebot3_slam_gmapping\nAverage rate: 20.202 Hz\nMost recent transform: 1648016557.943 ( -0.013 sec old)\nBuffer length: 4.950 sec\n"];
+"camera_link" -> "raspicam"[label="Broadcaster: /camera_broadcaster\nAverage rate: 98.741 Hz\nMost recent transform: 1648016557.891 ( 0.039 sec old)\nBuffer length: 4.902 sec\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1648016557.930"[ shape=plaintext ] ;
+ }->"map";
+}

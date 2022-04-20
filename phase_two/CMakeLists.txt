@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   nav_msgs
   fiducial_msgs
   visualization_msgs
+  sensor_msgs
 )
 
 catkin_package()
